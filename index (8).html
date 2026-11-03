@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Schoolroom – School Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f1e8;--panel:#fffdf6;--ink:#1d2b24;--mute:#66736b;--line:#ddd9c8;--side:#1f4d3a;--sideink:#eef3e8;--accent:#f2b705;--ok:#2f8f5b;--bad:#c4452f;--late:#c98a00;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121a16;--panel:#1a251f;--ink:#e9efe4;--mute:#92a198;--line:#2c3b33;--side:#0d2a1f;--ok:#4cc47e;--bad:#ef7660;--late:#e5b13a}}
+:root[data-theme="dark"]{--bg:#121a16;--panel:#1a251f;--ink:#e9efe4;--mute:#92a198;--line:#2c3b33;--side:#0d2a1f;--ok:#4cc47e;--bad:#ef7660;--late:#e5b13a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+aside{width:220px;background:var(--side);color:var(--sideink);padding:24px 16px;display:flex;flex-direction:column;gap:6px;flex-shrink:0;position:sticky;top:0;height:100vh}
+.brand{font-weight:800;font-size:22px;margin:0 8px 18px}
+.brand span{color:var(--accent)}
+nav button{all:unset;display:block;width:100%;padding:10px 12px;border-radius:8px;cursor:pointer;font-weight:600;color:var(--sideink);opacity:.8}
+nav button:hover{opacity:1;background:rgba(255,255,255,.08)}
+nav button.on{background:var(--accent);color:#1d2b24;opacity:1}
+nav button:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+main{flex:1;padding:28px;min-width:0;max-width:1100px}
+h1{margin:0 0 4px;font-size:30px;font-weight:800}
+.sub{color:var(--mute);margin:0 0 22px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:22px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.stat b{display:block;font-size:30px;font-weight:800}
+.stat small{color:var(--mute)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:18px}
+.card h2{margin:0 0 12px;font-size:18px}
+.wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:520px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);font-size:15px}
+th{color:var(--mute);font-weight:600}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+input.g{width:64px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.btn{font:inherit;font-weight:600;border:0;border-radius:8px;padding:9px 14px;cursor:pointer;background:var(--side);color:var(--sideink)}
+.btn.y{background:var(--accent);color:#1d2b24}
+.btn.x{background:transparent;color:var(--bad);padding:4px 8px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{font:inherit;border:0;background:transparent;color:var(--mute);padding:6px 12px;cursor:pointer}
+.seg button.p.on{background:var(--ok);color:#fff}
+.seg button.l.on{background:var(--late);color:#fff}
+.seg button.a.on{background:var(--bad);color:#fff}
+.pass{color:var(--ok);font-weight:600}.fail{color:var(--bad);font-weight:600}
+.empty{color:var(--mute);padding:14px 0}
+@media (max-width:760px){.app{flex-direction:column}aside{position:static;height:auto;width:100%;flex-direction:row;flex-wrap:wrap;padding:12px;align-items:center}.brand{margin:0 12px 0 4px}nav{display:flex;gap:4px;flex-wrap:wrap}nav button{width:auto}main{padding:18px}}
+.app{display:flex;min-height:100vh;background:var(--bg);position:relative}
+.hero{position:relative;min-height:100vh;background:#143a2b;color:#eef3e8;display:flex;flex-direction:column;justify-content:center;padding:clamp(24px,6vw,96px);overflow:hidden}
+.hero .orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5;pointer-events:none}
+.o1{width:380px;height:380px;background:#f2b705;top:-90px;right:-60px}.o2{width:300px;height:300px;background:#2f8f5b;bottom:-80px;left:8%}
+.hero h1{font-size:clamp(40px,8vw,104px);line-height:1;font-weight:800;margin:0 0 22px;max-width:12ch;letter-spacing:-.02em}
+.hero h1 .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em}.hero h1 .w i{display:inline-block;font-style:normal}
+.hero p{font-size:clamp(17px,2vw,22px);max-width:46ch;opacity:.85;margin:0 0 30px}
+.cta{all:unset;cursor:pointer;background:#f2b705;color:#1d2b24;font-weight:800;padding:16px 28px;border-radius:999px;display:inline-block;will-change:transform}
+.cta:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:56px}
+.feat{position:relative;border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:20px;background:rgba(255,255,255,.05);overflow:hidden}
+.feat::before{content:"";position:absolute;inset:0;background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),rgba(242,183,5,.22),transparent 70%);opacity:0;transition:opacity .3s}
+.feat:hover::before{opacity:1}
+.feat b{display:block;font-size:19px;margin-bottom:6px;position:relative}.feat span{opacity:.75;position:relative}
+.cnt{font-size:clamp(30px,4vw,48px);font-weight:800;color:#f2b705}
+@media (prefers-reduced-motion:reduce){.feat::before{transition:none}}
+body.dash .hero{display:none}body:not(.dash) .app{display:none}
+.hero{height:100vh;height:100svh;min-height:0}
+.home{margin:auto 8px 8px;color:var(--sideink);opacity:.75;font-weight:600;text-decoration:none;padding:10px 12px;border-radius:8px}
+.home:hover{opacity:1;background:rgba(255,255,255,.08)}.home:focus-visible{outline:2px solid var(--accent)}
+</style>
+</head>
+<body>
+<section class="hero" id="hero"><div class="orb o1" data-sp="60"></div><div class="orb o2" data-sp="-40"></div><h1 id="ht">Run your school without the paperwork.</h1><p class="fade">Students, attendance and grades in one calm place. Built for teachers who’d rather teach.</p><div class="fade"><button class="cta" id="go">Open the dashboard</button></div><div class="feats"><div class="feat"><div class="cnt" data-n="5">0</div><b>Students tracked</b><span>Enroll and search in seconds.</span></div><div class="feat"><div class="cnt" data-n="100">0</div><b>Daily roll calls</b><span>One tap marks the whole class.</span></div><div class="feat"><div class="cnt" data-n="4">0</div><b>Subjects graded</b><span>Averages update as you type.</span></div></div></section>
+<div class="app" id="app">
+<aside>
+  <div class="brand">School<span>room</span></div>
+  <nav id="nav"></nav>
+  <a class="home" href="#home">Back to home</a>
+</aside>
+<main id="view"></main>
+</div>
+<script>
+var SUBJ=["Math","Science","English","Filipino"],PASS=75;
+var S={tab:"Overview",q:"",date:new Date().toISOString().slice(0,10),db:null};
+function seed(){return{students:[
+ {id:1,name:"Ana Reyes",sec:"Grade 7 – Narra",g:{Math:88,Science:91,English:86,Filipino:90}},
+ {id:2,name:"Marco Dela Cruz",sec:"Grade 7 – Narra",g:{Math:72,Science:70,English:78,Filipino:80}},
+ {id:3,name:"Lia Santos",sec:"Grade 7 – Molave",g:{Math:95,Science:93,English:92,Filipino:89}},
+ {id:4,name:"Joel Bautista",sec:"Grade 7 – Molave",g:{Math:68,Science:74,English:71,Filipino:77}},
+ {id:5,name:"Kayla Mendoza",sec:"Grade 8 – Narra",g:{Math:81,Science:79,English:84,Filipino:85}}],
+ att:{},next:6}}
+function load(){try{var r=localStorage.getItem("schoolroom");if(r)return JSON.parse(r)}catch(e){}return seed()}
+function save(){try{localStorage.setItem("schoolroom",JSON.stringify(S.db))}catch(e){}}
+S.db=load();
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function avg(s){var v=SUBJ.map(function(k){return Number(s.g[k])||0});return v.reduce(function(a,b){return a+b},0)/v.length}
+function attOf(d){return S.db.att[d]||{}}
+function rate(d){var a=attOf(d),n=S.db.students.length;if(!n)return 0;var c=0;S.db.students.forEach(function(s){if(a[s.id]==="P"||a[s.id]==="L")c++});return Math.round(c/n*100)}
+function marked(d){return Object.keys(attOf(d)).length}
+var TABS=["Overview","Students","Attendance","Grades"];
+function nav(){document.getElementById("nav").innerHTML=TABS.map(function(t){return '<button class="'+(t===S.tab?"on":"")+'" data-t="'+t+'">'+t+'</button>'}).join("")}
+function head(t,s){return '<h1>'+t+'</h1><p class="sub">'+s+'</p>'}
+function overview(){
+ var st=S.db.students,n=st.length,ca=n?st.reduce(function(a,s){return a+avg(s)},0)/n:0;
+ var risk=st.filter(function(s){return avg(s)<PASS});
+ var top=st.slice().sort(function(a,b){return avg(b)-avg(a)}).slice(0,3);
+ return head("Overview","Today at a glance for your school.")+
+ '<div class="stats"><div class="stat"><b>'+n+'</b><small>Students enrolled</small></div>'+
+ '<div class="stat"><b>'+(marked(S.date)?rate(S.date)+"%":"–")+'</b><small>Present on '+S.date+'</small></div>'+
+ '<div class="stat"><b>'+ca.toFixed(1)+'</b><small>Class average</small></div>'+
+ '<div class="stat"><b>'+risk.length+'</b><small>Below passing ('+PASS+')</small></div></div>'+
+ '<div class="card"><h2>Top performers</h2>'+(top.length?top.map(function(s,i){return '<div>'+(i+1)+'. '+esc(s.name)+' <span class="pass">'+avg(s).toFixed(1)+'</span></div>'}).join(""):'<div class="empty">Add students to see rankings.</div>')+'</div>'+
+ '<div class="card"><h2>Needs support</h2>'+(risk.length?risk.map(function(s){return '<div>'+esc(s.name)+' – <span class="fail">'+avg(s).toFixed(1)+'</span></div>'}).join(""):'<div class="empty">Everyone is at or above passing.</div>')+'</div>'
+}
+function students(){
+ var q=S.q.toLowerCase(),list=S.db.students.filter(function(s){return (s.name+s.sec).toLowerCase().indexOf(q)>-1});
+ return head("Students","Add, search and remove enrolled students.")+
+ '<div class="card"><h2>Enroll a student</h2><div class="row"><input id="nn" placeholder="Full name"><input id="ns" placeholder="Grade &amp; section"><button class="btn y" id="add">Add student</button></div></div>'+
+ '<div class="card"><div class="row"><input id="q" placeholder="Search students" value="'+esc(S.q)+'"></div><div class="wrap"><table><tr><th>Name</th><th>Section</th><th>Average</th><th></th></tr>'+
+ (list.length?list.map(function(s){return '<tr><td>'+esc(s.name)+'</td><td>'+esc(s.sec)+'</td><td class="'+(avg(s)>=PASS?"pass":"fail")+'">'+avg(s).toFixed(1)+'</td><td><button class="btn x" data-del="'+s.id+'">Remove</button></td></tr>'}).join(""):'<tr><td colspan="4" class="empty">No students match. Add one above.</td></tr>')+'</table></div></div>'
+}
+function attendance(){
+ var a=attOf(S.date);
+ return head("Attendance","Mark each student for the selected day.")+
+ '<div class="card"><div class="row"><input type="date" id="dt" value="'+S.date+'"><button class="btn" id="allp">Mark all present</button><span class="sub" style="margin:0">'+(marked(S.date)?rate(S.date)+"% present or late":"Not marked yet")+'</span></div><div class="wrap"><table><tr><th>Student</th><th>Status</th></tr>'+
+ (S.db.students.length?S.db.students.map(function(s){var v=a[s.id];return '<tr><td>'+esc(s.name)+'</td><td><div class="seg"><button class="p '+(v==="P"?"on":"")+'" data-a="'+s.id+':P">Present</button><button class="l '+(v==="L"?"on":"")+'" data-a="'+s.id+':L">Late</button><button class="a '+(v==="A"?"on":"")+'" data-a="'+s.id+':A">Absent</button></div></td></tr>'}).join(""):'<tr><td colspan="2" class="empty">Enroll students first.</td></tr>')+'</table></div></div>'
+}
+function grades(){
+ return head("Grades","Enter scores from 0 to 100. Passing is "+PASS+".")+
+ '<div class="card"><div class="wrap"><table><tr><th>Student</th>'+SUBJ.map(function(k){return '<th>'+k+'</th>'}).join("")+'<th>Average</th></tr>'+
+ (S.db.students.length?S.db.students.map(function(s){return '<tr><td>'+esc(s.name)+'</td>'+SUBJ.map(function(k){return '<td><input class="g" type="number" min="0" max="100" data-g="'+s.id+':'+k+'" value="'+s.g[k]+'"></td>'}).join("")+'<td id="av'+s.id+'" class="'+(avg(s)>=PASS?"pass":"fail")+'">'+avg(s).toFixed(1)+'</td></tr>'}).join(""):'<tr><td colspan="6" class="empty">Enroll students first.</td></tr>')+'</table></div></div>'
+}
+function render(){nav();var v={Overview:overview,Students:students,Attendance:attendance,Grades:grades}[S.tab]();document.getElementById("view").innerHTML=v}
+function find(id){return S.db.students.filter(function(s){return s.id==id})[0]}
+document.addEventListener("click",function(e){
+ var t=e.target;
+ if(t.dataset.t){S.tab=t.dataset.t;render()}
+ else if(t.id==="add"){var n=document.getElementById("nn").value.trim(),sc=document.getElementById("ns").value.trim();if(!n){document.getElementById("nn").focus();return}
+  var g={};SUBJ.forEach(function(k){g[k]=0});S.db.students.push({id:S.db.next++,name:n,sec:sc||"Unassigned",g:g});save();render()}
+ else if(t.dataset.del){if(confirm("Remove this student and their records?")){S.db.students=S.db.students.filter(function(s){return s.id!=t.dataset.del});save();render()}}
+ else if(t.dataset.a){var p=t.dataset.a.split(":");S.db.att[S.date]=S.db.att[S.date]||{};S.db.att[S.date][p[0]]=p[1];save();render()}
+ else if(t.id==="allp"){S.db.att[S.date]={};S.db.students.forEach(function(s){S.db.att[S.date][s.id]="P"});save();render()}
+});
+document.addEventListener("input",function(e){
+ var t=e.target;
+ if(t.id==="q"){S.q=t.value;var pos=t.selectionStart;render();var q=document.getElementById("q");q.focus();q.setSelectionRange(pos,pos)}
+ else if(t.dataset.g){var p=t.dataset.g.split(":"),s=find(p[0]),v=Math.max(0,Math.min(100,Number(t.value)||0));s.g[p[1]]=v;save();var c=document.getElementById("av"+s.id);c.textContent=avg(s).toFixed(1);c.className=avg(s)>=PASS?"pass":"fail"}
+});
+document.addEventListener("change",function(e){if(e.target.id==="dt"&&e.target.value){S.date=e.target.value;render()}});
+render();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+(function(){
+try{
+var rm=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+var lenis=null;
+function route(){var d=location.hash==="#dashboard";document.body.classList.toggle("dash",d);if(lenis)lenis.scrollTo(0,{immediate:true});else window.scrollTo(0,0);if(window.ScrollTrigger)ScrollTrigger.refresh();if(d&&window.gsap&&!rm){gsap.from("aside",{x:-40,opacity:0,duration:.7,ease:"power3.out"});gsap.from("#view > *",{y:18,opacity:0,duration:.5,stagger:.06,delay:.1})}}
+window.addEventListener("hashchange",route);route();
+if(!window.gsap||!window.Lenis||rm){document.querySelectorAll(".cnt").forEach(function(c){c.textContent=c.dataset.n});document.getElementById("go").onclick=function(){location.hash="dashboard"};return}
+gsap.registerPlugin(ScrollTrigger);
+var lenis=new Lenis({duration:1.15,smoothWheel:true});
+lenis.on("scroll",ScrollTrigger.update);
+gsap.ticker.add(function(t){lenis.raf(t*1000)});gsap.ticker.lagSmoothing(0);
+var h=document.getElementById("ht");
+h.innerHTML=h.textContent.split(" ").map(function(w){return '<span class="w"><i>'+w+'</i></span>'}).join(" ");
+gsap.from("#ht i",{yPercent:110,duration:1,ease:"power4.out",stagger:.08,delay:.15});
+gsap.from(".hero .fade",{y:24,opacity:0,duration:.9,ease:"power3.out",stagger:.15,delay:.8});
+gsap.from(".feat",{y:40,opacity:0,duration:.9,ease:"power3.out",stagger:.12,scrollTrigger:{trigger:".feats",start:"top 92%"}});
+document.querySelectorAll(".cnt").forEach(function(c){var o={v:0};gsap.to(o,{v:+c.dataset.n,duration:1.6,ease:"power2.out",scrollTrigger:{trigger:c,start:"top 95%"},onUpdate:function(){c.textContent=Math.round(o.v)}})});
+document.querySelectorAll(".orb").forEach(function(o){gsap.to(o,{y:+o.dataset.sp*3,ease:"none",scrollTrigger:{trigger:".hero",start:"top top",end:"bottom top",scrub:true}})});
+document.querySelectorAll(".feat").forEach(function(f){f.addEventListener("pointermove",function(e){var r=f.getBoundingClientRect();f.style.setProperty("--mx",e.clientX-r.left+"px");f.style.setProperty("--my",e.clientY-r.top+"px")})});
+var b=document.getElementById("go"),bx=gsap.quickTo(b,"x",{duration:.4,ease:"power3"}),by=gsap.quickTo(b,"y",{duration:.4,ease:"power3"});
+b.addEventListener("pointermove",function(e){var r=b.getBoundingClientRect();bx((e.clientX-r.left-r.width/2)*.3);by((e.clientY-r.top-r.height/2)*.3)});
+b.addEventListener("pointerleave",function(){bx(0);by(0)});
+b.addEventListener("click",function(){location.hash="dashboard"});
+
+var last=S.tab,_r=render;
+render=function(){_r();if(S.tab!==last){last=S.tab;gsap.from("#view > *",{y:18,opacity:0,duration:.5,ease:"power2.out",stagger:.06})}};
+}catch(e){console.error(e)}
+})();
+</script>
+</body>
+</html>
